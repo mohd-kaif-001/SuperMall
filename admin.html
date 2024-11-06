@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <h1>Welcome Admin</h1>
+    <div class="forms">
+        <div class="singleform">
+            <h2>Create Shop Details</h2>
+            <form id="create-shop-form">
+                <div class="one">
+                    <div>
+                        <label for="shop-name">Shop Name:</label>
+                        <input type="text" id="shop-name" required>
+                    </div>
+                    <div>
+                        <label for="category">Category:</label>
+                        <input type="text" id="category" required>
+                    </div>
+                    <div>
+                        <label for="floor">Floor:</label>
+                        <input type="number" id="floor" required>
+                    </div>
+                    <button type="submit">Add Shop</button>
+                </div>
+            </form>
+        </div>
+        <div class="singleform">
+            <h2>Manage Offer Details</h2>
+            <form id="offer-form">
+                <div class="one">
+                    <div>
+                        <label for="offer-shop">Shop Name:</label>
+                        <input type="text" id="offer-shop" required>
+                    </div>
+                    <div>
+                        <label for="offer-details">Offer Details:</label>
+                        <textarea id="offer-details" required></textarea>
+                    </div>
+                    <button type="submit">Save Offer</button>
+                </div>
+
+            </form>
+        </div>
+        <div class="singleform">
+            <h2>Manage Category & Floor</h2>
+            <form id="category-floor-form">
+                <div class="one">
+                    <div>
+                        <label for="shop-category">Category:</label>
+                        <input type="text" id="shop-category" required>
+                    </div>
+                    <div>
+                        <label for="floor-number">Floor:</label>
+                        <input type="number" id="floor-number" required>
+                    </div>
+                    <button type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script defer type="module">
+        import { db, getDocs, collection, addDoc } from "./firebase-config.js";
+
+        async function addShopAndOfferDetails() {
+            document.getElementById('create-shop-form').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Get input values
+                const shopName = document.getElementById('shop-name').value;
+                const category = document.getElementById('category').value;
+                const floor = document.getElementById('floor').value;
+
+                try {
+                    // Add a new document to the 'soilDetails' collection in Firestore
+                    await addDoc(collection(db, 'shopDetails'), {
+                        shopName: shopName,
+                        category: category,
+                        floor: parseInt(floor),
+                        timestamp: new Date()
+                    });
+
+                    alert("Shop details submitted successfully!");
+
+                    // Clear the form after submission
+                    document.getElementById('create-shop-form').reset();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to submit shop details.");
+                }
+            });
+
+            document.getElementById('offer-form').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Get input values
+                const shopOffer = document.getElementById('offer-shop').value;
+                const details = document.getElementById('offer-details').value;
+
+
+                try {
+                    // Add a new document to the 'soilDetails' collection in Firestore
+                    await addDoc(collection(db, 'offerDetails'), {
+                        shopName: shopOffer,
+                        offerDetail: details,
+                        timestamp: new Date()
+                    });
+
+                    alert("Offer details submitted successfully!");
+
+                    // Clear the form after submission
+                    document.getElementById('offer-form').reset();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to submit offer details.");
+                }
+            });
+
+            document.getElementById('category-floor-form').addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Get input values
+                const shopCategory = document.getElementById('shop-category').value;
+                const floorNumber = document.getElementById('floor-number').value;
+
+                try {
+                    // Add a new document to the 'soilDetails' collection in Firestore
+                    await addDoc(collection(db, 'floorDetails'), {
+                        shopCategory: shopCategory,
+                        floorNumber: floorNumber,
+                        timestamp: new Date()
+                    });
+
+                    alert("Floor details submitted successfully!");
+
+                    // Clear the form after submission
+                    document.getElementById('category-floor-form').reset();
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to submit floor details.");
+                }
+            });
+        }
+
+        addShopAndOfferDetails();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Welcome User</h1>
+    <h2>Shop Details</h2>
+    <table id="shopTable">
+        <thead>
+            <tr>
+                <th>Shop Name</th>
+                <th>Category</th>
+                <th>Floor</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Offer Details</h2>
+    <table id="offerTable">
+        <thead>
+            <tr>
+                <th>Shop Name</th>
+                <th>Offer Details</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Category and Floor</h2>
+    <table id="floorTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Floor</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script defer type="module">
+        import { db, getDocs, collection } from "./firebase-config.js";
+
+        // Function to fetch soil details and display in the table
+        async function fetchAndDisplayShopDetails() {
+            try {
+                // Get the table body element
+                const tableBody = document.querySelector("#shopTable tbody");
+
+                // Fetch the documents from the 'soilDetails' collection
+                const querySnapshot = await getDocs(collection(db, "shopDetails"));
+
+                // Loop through each document in the snapshot
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a new row for each document
+                    const row = document.createElement("tr");
+
+                    // Create and append cells for each field in the document
+                    const shopNameCell = document.createElement("td");
+                    shopNameCell.textContent = data.shopName;
+                    row.appendChild(shopNameCell);
+
+                    const shopFloorCell = document.createElement("td");
+                    shopFloorCell.textContent = data.floor;
+                    row.appendChild(shopFloorCell);
+
+                    const shopCategory = document.createElement("td");
+                    shopCategory.textContent = data.category;
+                    row.appendChild(shopCategory);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+            }
+        }
+
+        async function fetchAndDisplayOfferDetails() {
+            try {
+                // Get the table body element
+                const tableBody = document.querySelector("#offerTable tbody");
+
+                // Fetch the documents from the 'soilDetails' collection
+                const querySnapshot = await getDocs(collection(db, "offerDetails"));
+
+                // Loop through each document in the snapshot
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a new row for each document
+                    const row = document.createElement("tr");
+
+                    // Create and append cells for each field in the document
+                    const shopName = document.createElement("td");
+                    shopName.textContent = data.shopName;
+                    row.appendChild(shopName);
+
+                    const offerDetails = document.createElement("td");
+                    offerDetails.textContent = data.offerDetail;
+                    row.appendChild(offerDetails);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+            }
+        }
+
+        async function fetchAndDisplayCategoryFloor() {
+            try {
+                // Get the table body element
+                const tableBody = document.querySelector("#floorTable tbody");
+
+                // Fetch the documents from the 'soilDetails' collection
+                const querySnapshot = await getDocs(collection(db, "floorDetails"));
+
+                // Loop through each document in the snapshot
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a new row for each document
+                    const row = document.createElement("tr");
+
+                    // Create and append cells for each field in the document
+                    const shopCategory = document.createElement("td");
+                    shopCategory.textContent = data.shopCategory;
+                    row.appendChild(shopCategory);
+
+                    const floorDetails = document.createElement("td");
+                    floorDetails.textContent = data.floorNumber;
+                    row.appendChild(floorDetails);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+            }
+        }
+
+        fetchAndDisplayShopDetails();
+        fetchAndDisplayOfferDetails();
+        fetchAndDisplayCategoryFloor();
+    </script>
+</body>
+
+</html>
